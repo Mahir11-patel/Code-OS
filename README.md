@@ -22,7 +22,7 @@ sudo apt update
 sudo apt install -y live-build debootstrap squashfs-tools xorriso \
   grub-pc-bin grub-efi-amd64-bin mtools dosfstools
 cd linux-distro
-sudo ./scripts/build-local.sh
+sudo bash ./scripts/build-local.sh
 ```
 
 Read the [Linux distribution guide](./linux-distro/README.md) and [roadmap](./linux-distro/ROADMAP.md) before testing.
