@@ -1,0 +1,58 @@
+#!/bin/sh
+set -eu
+
+# KodeOS identity. Keep this hook idempotent: it may run during repeated builds.
+if [ -f /etc/os-release ]; then
+    if ! grep -q '^PRETTY_NAME="KodeOS Developer Live"' /etc/os-release; then
+        cat >> /etc/os-release <<'EOF'
+NAME="KodeOS"
+PRETTY_NAME="KodeOS Developer Live"
+ID=kodeos
+ID_LIKE=debian
+HOME_URL="https://github.com/Mahir11-patel/Code-OS"
+SUPPORT_URL="https://github.com/Mahir11-patel/Code-OS/issues"
+BUG_REPORT_URL="https://github.com/Mahir11-patel/Code-OS/issues"
+EOF
+    fi
+fi
+
+mkdir -p /etc/skel/Projects /etc/skel/.config/autostart
+cat > /etc/skel/README-KODEOS.txt <<'EOF'
+Welcome to KodeOS Developer Live
+
+Your projects folder is ~/Projects.
+The system includes compilers, Git, Python, Node.js, Java, Rust and Go.
+Most local development tasks work without an internet connection.
+
+Open Synaptic to manage installed Debian packages.
+Use 'kodeos-help' in the terminal for a quick guide.
+EOF
+
+cat > /usr/local/bin/kodeos-help <<'EOF'
+#!/bin/sh
+cat <<'HELP'
+KodeOS Developer Live — quick help
+
+  mkdir -p ~/Projects/demo && cd ~/Projects/demo
+  python3 -m venv .venv
+  . .venv/bin/activate
+  git init
+  gcc --version
+  python3 --version
+  node --version
+  javac -version
+  rustc --version
+  go version
+
+Offline note: local editors, compilers and installed tools work offline.
+Remote Git hosting, downloads, online package indexes and web services need internet.
+HELP
+EOF
+chmod 0755 /usr/local/bin/kodeos-help
+
+# A small, unobtrusive desktop identity without downloading remote assets.
+mkdir -p /usr/share/kodeos
+cat > /usr/share/kodeos/README <<'EOF'
+KodeOS Developer Live
+Debian-based developer workstation configuration.
+EOF
