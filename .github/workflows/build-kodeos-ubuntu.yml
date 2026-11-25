@@ -1,0 +1,30 @@
+name: Build KodeOS Ubuntu ISO
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - "kodeos-ubuntu/**"
+      - "BUILD_KODEOS.bat"
+      - ".github/workflows/build-kodeos-ubuntu.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 240
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build KodeOS Ubuntu ISO
+        run: sudo bash kodeos-ubuntu/scripts/build.sh
+      - name: Upload ISO and checksum
+        uses: actions/upload-artifact@v4
+        with:
+          name: KodeOS-Ubuntu-Live-amd64
+          path: |
+            kodeos-ubuntu/output/KodeOS-Ubuntu-amd64.iso
+            kodeos-ubuntu/output/SHA256SUMS
+          if-no-files-found: error
+          retention-days: 14
