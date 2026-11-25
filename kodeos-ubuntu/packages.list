@@ -16,7 +16,6 @@ xfce4-terminal
 firefox
 calamares
 grub-efi-amd64
-grub-pc
 sudo
 curl
 wget
