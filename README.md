@@ -1,48 +1,30 @@
 # KodeOS — Developer Operating System
 
-KodeOS is an open-source developer OS project. The repository contains two related projects:
+KodeOS is an open-source developer OS project.
 
-- **KodeOS Linux** — a Debian-based, XFCE live operating system for x86_64 PCs, targeting 4 GB RAM. Its build configuration is in [linux-distro/](./linux-distro/).
-- **CodeOS Web Desktop** — the existing browser-based desktop prototype, retained in this repository under its original files.
+## Ubuntu edition (active direction)
 
-## Build the Linux live ISO
+The Ubuntu-based implementation is being developed in [kodeos-ubuntu/](./kodeos-ubuntu/). It targets Ubuntu 24.04 LTS, x86_64 PCs, a 4 GB RAM class lightweight desktop, Windows/WSL and native Linux build paths, and a bootable ISO workflow.
 
-The Linux distribution uses Debian Live Build and GitHub Actions.
+- [Ubuntu edition build guide](./kodeos-ubuntu/README.md)
+- [Ubuntu package selection](./kodeos-ubuntu/packages.list)
+- [Ubuntu ISO build script](./kodeos-ubuntu/scripts/build.sh)
+- [Windows build launcher](./BUILD_KODEOS.bat)
+- [GitHub Actions ISO workflow](./.github/workflows/build-kodeos-ubuntu.yml)
 
-1. Open the **Actions** tab.
-2. Select **Build KodeOS ISO**.
-3. Choose **Run workflow**.
-4. Wait for the build to finish.
-5. Download the `kodeos-developer-live-amd64` artifact from the workflow run.
+The Ubuntu ISO workflow is a development build. The first successful build, live boot, Calamares installation, and hardware validation must be confirmed before publishing a stable release.
 
-Build locally on Debian 13:
+## Existing prototypes
 
-```bash
-sudo apt update
-sudo apt install -y live-build debootstrap squashfs-tools xorriso \
-  grub-pc-bin grub-efi-amd64-bin mtools dosfstools
-cd linux-distro
-sudo bash ./scripts/build-local.sh
-```
+- **KodeOS Linux Debian prototype** — the earlier Debian Live Build scaffold in [linux-distro/](./linux-distro/). It is retained for reference and is not the Ubuntu edition.
+- **CodeOS Web Desktop** — the existing browser-based desktop prototype in `codeos.html`.
 
-Read the [Linux distribution guide](./linux-distro/README.md) and [roadmap](./linux-distro/ROADMAP.md) before testing.
+## Important constraints
 
-## KodeOS Linux goals
-
-- Bootable USB live session with a permanent installation option
-- Lightweight XFCE desktop for 4 GB RAM target hardware
-- Offline local coding with Python, C/C++, Java, JavaScript, Rust and Go toolchains
-- Git, terminal, editor and system utilities
-- Kode Studio, Kode Store and Kode Terminal as the project matures
-- Optional local AI model support; models are distributed separately due to size and RAM constraints
-- No mandatory cloud account or internet connection for core local development
-
-**Important:** The first ISO is a development build. Test it in a virtual machine before using it on a real computer. Creating the ISO does not flash a USB drive or install onto a disk. Back up important data before using any installer.
-
-## Project status
-
-The repository currently contains the initial Debian Live Build scaffold and CI workflow. The first successful ISO build, installer validation, offline package repository, Kode applications and hardware testing remain development tasks.
+- A bootable live image and a tested permanent installer are separate milestones. Do not install an unvalidated image on a physical disk.
+- Full Kimi K3 weights do not fit the 4 GB RAM / 256 GB storage target. The `k3-in-c` inference engine source is not the same thing as the model weights. KodeOS will need a small model for the 4 GB edition; full K3 requires substantially more storage and memory.
+- The first ISO build downloads packages while building. Once all selected packages and model files are present locally, the installed OS can run offline. The current image is not yet a complete offline mirror of every developer package.
 
 ## License
 
-The KodeOS distribution configuration and original scripts are MIT-licensed. Third-party packages and components retain their respective upstream licenses.
+Original KodeOS scripts and configuration are MIT-licensed. Third-party packages and components retain their respective upstream licenses.
